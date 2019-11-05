@@ -1,37 +1,48 @@
 import React from 'react'
-import ChartistGraph from 'react-chartist'
-import data from './data.json'
-import style from './style.module.scss'
+// import { Select, Spin } from 'antd';
+// import debounce from 'lodash/debounce';
+import { AutoComplete } from 'antd';
 
-const options = {
-  seriesBarDistance: 10,
-  horizontalBars: true,
-  axisY: {
-    showGrid: false,
-    showLabel: false,
-    offset: 0,
-  },
-}
+// function onSelect(value) {
+//   console.log('onSelect', value);
+// }
+
+// const { Option } = Select;
 
 class Chart1 extends React.Component {
+  state = {
+    // value: '',
+    dataSource: [],
+  };
+
+  componentDidMount() {
+    fetch(`http://localhost:7000/convert`)
+      .then(res => res.json())
+      .then(json => {
+        this.setState({
+          dataSource: json
+        });
+      })
+  }
+
   render() {
+    const { dataSource } = this.state;
+    const name = dataSource.map(object => object.name);
+    function Complete() {
+      return (
+        <AutoComplete
+          style={{ width: 400 }}
+          dataSource={name}
+          placeholder="Search"
+          filterOption={(inputValue, option) =>
+            option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+          }
+        />
+      );
+    }
     return (
-      <div>
-        <div className="d-flex flex-wrap mb-3">
-          <div className={style.item}>
-            <div className="font-size-18 text-dark font-weight-bold">
-              +$12,367.36 <span className="text-success font-size-12 align-text-top">+25%</span>
-            </div>
-            <div className="text-uppercase text-gray-4">Total sales</div>
-          </div>
-          <div className={style.item}>
-            <div className="font-size-18 text-dark font-weight-bold">
-              +$5,367.36 <span className="text-danger font-size-12 align-text-top">-76%</span>
-            </div>
-            <div className="text-uppercase text-gray-4">Avg. Per Day</div>
-          </div>
-        </div>
-        <ChartistGraph className="height-300" data={data} options={options} type="Bar" />
+      <div style={{marginLeft:800}}>
+        <Complete />
       </div>
     )
   }

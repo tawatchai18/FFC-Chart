@@ -1,94 +1,162 @@
 import React from 'react'
-import { Table } from 'antd'
-import { VectorMap } from 'react-jvectormap'
-import data from './data.json'
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
+import { AutoComplete, Button } from 'antd';
 
-const columns = [
-  {
-    title: 'Action name',
-    dataIndex: 'actionName',
-    key: 'actionName',
-    className: 'bg-transparent text-gray-6',
-  },
-  {
-    title: 'Location',
-    dataIndex: 'location',
-    key: 'location',
-    className: 'bg-transparent',
-    render: text => {
-      return (
-        <a href="javascript: void(0);" className="text-blue">
-          {text}
-        </a>
-      )
-    },
-  },
-  {
-    title: 'Phone',
-    dataIndex: 'phone',
-    key: 'phone',
-    className: 'text-left text-gray-6 bg-transparent',
-  },
-  {
-    title: 'Value',
-    dataIndex: 'value',
-    key: 'value',
-    className: 'text-right bg-transparent text-gray-6',
-    render: text => <span className="font-weight-bold">{text}</span>,
-  },
-]
 
 class Chart7 extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      dataSource: [],
+      pyramid01: []
+    }
+    this.handleValidSubmit = this.handleValidSubmit.bind(this);
+    this.onChange = this.onChange.bind(this)
+  }
+
+  componentDidMount() {
+    fetch(`http://localhost:7000/convert`)
+      .then(res => res.json())
+      .then(json => {
+        this.setState({
+          dataSource: json
+        });
+      })
+    fetch(`http://localhost:7000/pyramid`)
+      .then(res => res.json())
+      .then(json => {
+        this.setState({
+          pyramid01: json
+        });
+      })
+  }
+
+  onChange() {
+    fetch(`http://localhost:7000/pyramid`)
+      .then(res => res.json())
+      .then(json => {
+        this.setState({
+          pyramid01: json
+        });
+        console.log(json, '====');
+      })
+  }
+
+  handleValidSubmit(value) {
+    const { dataSource } = this.state;
+    const organization = dataSource.find((item) => {
+      return item.name === value
+    })
+    if (organization !== undefined) {
+      const idOption = organization.id
+      console.log(idOption, 'ooooo');
+      fetch(`http://localhost:7000/pyramid/${idOption}`)
+        .then(res => res.json())
+        .then(json => {
+          this.setState({
+            pyramid01: json
+          });
+          console.log(json, '====');
+        })
+    }
+  }
+
   render() {
+    const { pyramid01, dataSource } = this.state;
+    const name = dataSource.map(object => object.name);
+    const age = pyramid01.map(object => object.age);
+    const female = pyramid01.map(object => object.female);
+    const male = pyramid01.map(object => -Math.abs(object.male));
+    const submit = this.handleValidSubmit;
+    const onSubmit = this.onChange
+
+    function Complete() {
+      return (
+        <AutoComplete
+          style={{ width: 400 }}
+          onChange={submit}
+          dataSource={name}
+          placeholder="เลือกหน่วยงาน"
+          filterOption={(inputValue, option) =>
+            option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+          }
+        />
+      );
+    }
+    const options1 = {
+      chart: {
+        type: 'bar',
+        backgroundImage: "url('resources/images/bg_pop.png')"
+      },
+      colors: ['#008FFB', '#FF4560'],
+      title: {
+        text: 'ปิรามิดประชากร',
+      },
+      subtitle: {
+        text: ''
+      },
+      xAxis: [{
+        categories: age,
+        reversed: false,
+        labels: {
+          step: 1
+        }
+      }, { // อายุอีกฝั่ง
+        opposite: true,
+        reversed: false,
+        categories: age,
+
+        linkedTo: 0,
+        labels: {
+          step: 1
+        }
+      }],
+      yAxis: {
+        title: {
+          text: null
+        },
+        labels: {
+          formatter() {
+            return Math.abs(this.value);
+          }
+        },
+        // min: -100 *500,
+        // max: 100 *500,
+      },
+      plotOptions: {
+        series: {
+          stacking: 'normal',
+        }
+      },
+      tooltip: {
+        formatter() {
+          return `<b>${this.series.name}, ช่วงอายุ ${this.point.category}</b><br/>` +
+            `จำนวน:${Highcharts.numberFormat(Math.abs(this.point.y).toFixed(3), 0)}`;
+        }
+      },
+      series: [
+        {
+          name: "ชาย",
+          data: male,
+          background: '#FCFFC5'
+        },
+        {
+          name: "หญิง",
+          data: female
+        }
+      ]
+    }
     return (
-      <div>
-        <div className="height-300 position-relative mb-3">
-          <VectorMap
-            map="us_aea"
-            backgroundColor="transparent"
-            containerStyle={{
-              width: '100%',
-              height: '100%',
-            }}
-            containerClassName="map"
-            regionStyle={{
-              initial: {
-                fill: '#d1e6fa',
-                'fill-opacity': 0.9,
-                stroke: '#fff',
-                'stroke-width': 2,
-                'stroke-opacity': 0.05,
-              },
-              hover: {
-                'fill-opacity': 0.8,
-                fill: '#1b55e3',
-                cursor: 'pointer',
-              },
-            }}
-            series={{
-              regions: [
-                {
-                  attribute: 'fill',
-                  values: {
-                    'US-CA': '#69b2f8',
-                    'US-MO': '#69b2f8',
-                    'US-FL': '#69b2f8',
-                    'US-OR': '#69b2f8',
-                    'US-TX': '#69b2f8',
-                  },
-                },
-              ],
-            }}
-          />
+      <div className="position-relative">
+        <div>
+          <Complete />
+          <Button>ค้นหา</Button>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <Button onClick={onSubmit}>หน่วยงานทั้งหมด</Button>
         </div>
-        <div className="air__utils__scrollTable">
-          <Table
-            columns={columns}
-            dataSource={data.table}
-            pagination={false}
-            scroll={{ x: '100%' }}
-          />
-        </div>
+        <HighchartsReact highcharts={Highcharts} options={options1} style={{ width: "100%", height: "400px" }} />
       </div>
     )
   }

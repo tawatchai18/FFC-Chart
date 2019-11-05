@@ -2,7 +2,7 @@ import React from 'react'
 import Search from './Search'
 // import IssuesHistory from './IssuesHistory'
 // import Status from './Status'
-import LanguageSwitcher from './LanguageSwitcher'
+// import LanguageSwitcher from './LanguageSwitcher'
 // import Actions from './Actions'
 import UserMenu from './UserMenu'
 import style from './style.module.scss'
@@ -21,7 +21,7 @@ class TopBar extends React.Component {
           {/* <Status /> */}
         </div>
         <div className="mr-4 d-none d-sm-block">
-          <LanguageSwitcher />
+          {/* <LanguageSwitcher /> */}
         </div>
         <div className="mr-4 d-none d-sm-block">
           {/* <Actions /> */}

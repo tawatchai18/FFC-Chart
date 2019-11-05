@@ -5,7 +5,6 @@ import { CSSTransition, SwitchTransition } from 'react-transition-group'
 import Switch from 'react-router-transition-switch'
 import Loadable from 'react-loadable'
 import { connect } from 'react-redux'
-
 import Layout from 'layouts'
 import Loader from 'components/layout/Loader'
 import NotFoundPage from 'pages/system/404'
@@ -24,36 +23,62 @@ const routes = [
     Component: loadable(() => import('pages/dashboard/analytics')),
     exact: true,
   },
-  {
-    path: '/dashboard/statistics',
-    Component: loadable(() => import('pages/dashboard/statistics')),
-    exact: true,
-  },
-  {
-    path: '/dashboard/ecommerce',
-    Component: loadable(() => import('pages/dashboard/ecommerce')),
-    exact: true,
-  },
-  {
-    path: '/dashboard/crypto',
-    Component: loadable(() => import('pages/dashboard/crypto')),
-    exact: true,
-  },
-  {
-    path: '/dashboard/jira',
-    Component: loadable(() => import('pages/dashboard/jira')),
-    exact: true,
-  },
-  {
-    path: '/dashboard/helpdesk',
-    Component: loadable(() => import('pages/dashboard/helpdesk')),
-    exact: true,
-  },
-  {
-    path: '/system/500',
-    Component: loadable(() => import('pages/system/500')),
-    exact: true,
-  },
+  // {
+  //   path: '/dashboard/statistics',
+  //   Component: loadable(() => import('pages/dashboard/statistics')),
+  //   exact: true,
+  // },
+  // {
+  //   path: '/dashboard/ecommerce',
+  //   Component: loadable(() => import('pages/dashboard/ecommerce')),
+  //   exact: true,
+  // },
+  // {
+  //   path: '/dashboard/crypto',
+  //   Component: loadable(() => import('pages/dashboard/crypto')),
+  //   exact: true,
+  // },
+  // {
+  //   path: '/dashboard/jira',
+  //   Component: loadable(() => import('pages/dashboard/jira')),
+  //   exact: true,
+  // },
+  // {
+  //   path: '/dashboard/helpdesk',
+  //   Component: loadable(() => import('pages/dashboard/helpdesk')),
+  //   exact: true,
+  // },
+  // {
+  //   path: '/system/500',
+  //   Component: loadable(() => import('pages/system/500')),
+  //   exact: true,
+  // },
+  // {
+  //   path: '/system/login',
+  //   Component: loadable(() => import('pages/system/login')),
+  //   exact: true,
+  // },
+  // {
+  //   path: '/system/forgot-password',
+  //   Component: loadable(() => import('pages/system/forgot-password')),
+  //   exact: true,
+  // },
+  // {
+  //   path: '/system/register',
+  //   Component: loadable(() => import('pages/system/register')),
+  //   exact: true,
+  // },
+  // {
+  //   path: '/system/lockscreen',
+  //   Component: loadable(() => import('pages/system/lockscreen')),
+  //   exact: true,
+  // },
+  // {
+  //   path: '/system/404',
+  //   Component: loadable(() => import('pages/system/404')),
+  //   exact: true,
+  // },
+]
   // // Ecommerce
   // {
   //   path: '/ecommerce/dashboard',
@@ -295,32 +320,32 @@ const routes = [
   //   exact: true,
   // },
   // // System Pages
-  {
-    path: '/system/login',
-    Component: loadable(() => import('pages/system/login')),
-    exact: true,
-  },
-  {
-    path: '/system/forgot-password',
-    Component: loadable(() => import('pages/system/forgot-password')),
-    exact: true,
-  },
-  {
-    path: '/system/register',
-    Component: loadable(() => import('pages/system/register')),
-    exact: true,
-  },
-  {
-    path: '/system/lockscreen',
-    Component: loadable(() => import('pages/system/lockscreen')),
-    exact: true,
-  },
-  {
-    path: '/system/404',
-    Component: loadable(() => import('pages/system/404')),
-    exact: true,
-  },
-]
+//   {
+//     path: '/system/login',
+//     Component: loadable(() => import('pages/system/login')),
+//     exact: true,
+//   },
+//   {
+//     path: '/system/forgot-password',
+//     Component: loadable(() => import('pages/system/forgot-password')),
+//     exact: true,
+//   },
+//   {
+//     path: '/system/register',
+//     Component: loadable(() => import('pages/system/register')),
+//     exact: true,
+//   },
+//   {
+//     path: '/system/lockscreen',
+//     Component: loadable(() => import('pages/system/lockscreen')),
+//     exact: true,
+//   },
+//   {
+//     path: '/system/404',
+//     Component: loadable(() => import('pages/system/404')),
+//     exact: true,
+//   },
+// ]
 
 const mapStateToProps = ({ settings }) => ({ settings })
 

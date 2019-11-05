@@ -1,39 +1,115 @@
-import React from 'react'
-import ChartistGraph from 'react-chartist'
-import data from './data.json'
 
-const options = {
-  chartPadding: {
-    right: 0,
-    left: 0,
-    top: 5,
-    bottom: 5,
-  },
-  fullWidth: true,
-  showPoint: false,
-  lineSmooth: true,
-  axisY: {
-    showGrid: false,
-    showLabel: false,
-    offset: 0,
-  },
-  axisX: {
-    showGrid: false,
-    showLabel: false,
-    offset: 0,
-  },
-  showArea: false,
-}
+import React, { Component } from "react";
+import Highcharts from "highcharts";
+// import HighchartsReact from "highcharts-react-official";
 
-class Chart4 extends React.Component {
+import PieChart from "highcharts-react-official";
+
+class Chart4 extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: [],
+
+    }
+  }
+
+  componentDidMount() {
+    fetch(`http://localhost:8081/ratold_pie`)
+      .then(res => res.json())
+      .then(json => {
+        this.setState({
+          user: json
+        });
+      })
+  }
+
   render() {
+    const { user } = this.state;
+    const name = user.map(object => object.name);
+    // const count = user.map(object => object.count);
+
+    console.log(user, name, 'lrjfk');
+    const options = {
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+      },
+      title: {
+        text: 'อัตราส่วนผู้สูงอายุ'
+      },
+      tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: false
+          },
+          showInLegend: true
+        }
+      },
+      series: [{
+        name: 'Brands',
+        colorByPoint: true,
+        data: [{
+          name: 'ติดบ้าน',
+          y: 61.41,
+          sliced: true,
+          selected: true
+        },
+        { name: 'ติดเตียง', y: 10.85 },
+        { name: 'ติดสังคม', y: 4.67 },
+        { name: 'ยังไม่ประเมิน', y: 4.18 },
+        ]
+      }]
+
+      // chart: {
+      //   plotBackgroundColor: null,
+      //   plotBorderWidth: null,
+      //   plotShadow: false,
+      //   type: 'pie'
+      // },
+      // title: {
+      //   text: 'อัตราส่วนผู้สูงอายุ'
+      // },
+      // tooltip: {
+      //   pointFormat: '{series.name}: <b>{point.percentage:.1f}</b>'
+      // },
+      // plotOptions: {
+      //   pie: {
+      //     allowPointSelect: true,
+      //     cursor: 'pointer',
+      //     dataLabels: {
+      //       enabled: true,
+      //       format: '<b>{point.name}</b>: {point.percentage:.1f} ',
+      //       connectorColor: 'silver'
+      //     }
+      //   }
+      // },
+      // series: [{
+      //   name: 'จำนวน',
+      //   data: [
+      //     // { name: name, y: 61.41 },
+      //     { name: 'ติดบ้าน', y: 11.84 },
+      //     { name: 'ติดเตียง', y: 10.85 },
+      //     { name: 'ติดสังคม', y: 4.67 },
+      //     { name: 'ยังไม่ประเมิน', y: 4.18 },
+      //   ]
+      // }]
+    };
+
     return (
       <div>
-        <div className="font-weight-bold text-dark font-size-24">78,367</div>
-        <div>Total Sales</div>
-        <ChartistGraph className="height-200" data={data} options={options} type="Line" />
+        <center>
+          <PieChart highcharts={Highcharts} options={options} />
+        </center>
       </div>
-    )
+    );
   }
 }
 

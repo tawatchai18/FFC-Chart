@@ -1,45 +1,83 @@
-import React from 'react'
-import ChartistGraph from 'react-chartist'
-import data from './data.json'
-import style from './style.module.scss'
 
-const options = {
-  stackBars: true,
-  fullWidth: true,
-  chartPadding: {
-    right: 0,
-    left: 0,
-    top: 5,
-    bottom: 0,
-  },
-  low: 0,
-  axisY: {
-    showGrid: false,
-    showLabel: false,
-    offset: 0,
-  },
-  axisX: {
-    showGrid: false,
-    showLabel: false,
-    offset: 0,
-  },
-  seriesBarDistance: 5,
-}
+import React, { Component } from "react";
+import Highcharts from "highcharts";
+// import HighchartsReact from "highcharts-react-official";
 
-class Chart5 extends React.Component {
+import PieChart from "highcharts-react-official";
+
+class Chart5 extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: [],
+
+    }
+  }
+
+  componentDidMount() {
+    fetch(`http://localhost:8081/ratold_pie`)
+      .then(res => res.json())
+      .then(json => {
+        this.setState({
+          user: json
+        });
+      })
+  }
+
   render() {
+    const { user } = this.state;
+    const name = user.map(object => object.name);
+    // const count = user.map(object => object.count);
+
+    console.log(user, name, 'lrjfk');
+    const options = {
+      chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+      },
+      title: {
+        text: 'รายงานสะสมโรค NCD'
+      },
+      tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: false
+          },
+          showInLegend: true
+        }
+      },
+      series: [{
+        name: 'Brands',
+        colorByPoint: true,
+        data: [{
+          name: 'โรคเบาหวาน',
+          y: 31.41,
+          sliced: true,
+          selected: true
+        },
+        { name: 'โรคหลอดเลือดสมองและหัวใจ', y: 10.85 },
+        { name: 'โรคถุงลมโป่งพอง', y: 4.67 },
+        { name: 'โรคมะเร็ง', y: 15.18 },
+        { name: 'โรคความดันโลหิตสูง', y: 8.18 },
+        { name: 'โรคความอ้วนลงพุง', y: 10.18 },
+        ]
+      }]
+    };
+
     return (
       <div>
-        <div className="text-dark font-size-18 font-weight-bold mb-1">Year Profit</div>
-        <div className="text-gray-6 mb-2">Revenue by location and date</div>
-        <ChartistGraph
-          className={`height-200 ${style.chart}`}
-          data={data}
-          options={options}
-          type="Bar"
-        />
+        <center>
+          <PieChart highcharts={Highcharts} options={options} />
+        </center>
       </div>
-    )
+    );
   }
 }
 

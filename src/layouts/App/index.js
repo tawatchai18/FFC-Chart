@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import classNames from 'classnames'
 import TopBar from 'components/layout/TopBar'
-import SubBar from 'components/layout/SubBar'
-import MenuLeft from 'components/layout/MenuLeft'
+// import SubBar from 'components/layout/SubBar'
+// import MenuLeft from 'components/layout/MenuLeft'
 import MenuTop from 'components/layout/MenuTop'
 import Footer from 'components/layout/Footer'
 import Sidebar from 'components/layout/Sidebar'
@@ -45,7 +45,7 @@ class AppLayout extends React.PureComponent {
       >
         <Sidebar />
         <SupportChat />
-        {menuLayoutType === 'left' && <MenuLeft />}
+        {/* {menuLayoutType === 'left' && <MenuLeft />} */}
         {menuLayoutType === 'top' && <MenuTop />}
         <Layout>
           <Layout.Header
@@ -55,7 +55,7 @@ class AppLayout extends React.PureComponent {
             })}
           >
             <TopBar />
-            <SubBar />
+            {/* <SubBar /> */}
           </Layout.Header>
           <Layout.Content style={{ height: '100%', position: 'relative' }}>
             <div className="air__utils__content">{children}</div>
